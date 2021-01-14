@@ -1,0 +1,14 @@
+.table {
+    height: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.crupier {
+    height: 45%;
+}
+
+.player {
+    height: 55%;
+}

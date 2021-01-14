@@ -1,9 +1,14 @@
 import "./App.css";
+import Header from "./containers/Header";
+import Interface from "./containers/Interface";
+import Table from "./containers/Table";
 
 const App = () => {
   return (
     <div className="root">
-      <p>Hello!</p>
+      <Header/>
+      <Table/>
+      <Interface/>
     </div>
   );
 };

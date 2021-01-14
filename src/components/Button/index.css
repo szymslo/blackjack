@@ -1,0 +1,19 @@
+.action {
+    height: auto;
+    width: 10vw;
+    font-size: 1.5vw;
+    font-weight: bold;
+    margin: 1vh;
+    border: solid 1px transparent;
+    border-radius: 0.5vw;
+    text-decoration: none;
+    outline: none;
+    color: #ffffff;
+    background-color: black;
+}
+
+.action:hover {
+  color: white;
+  border-color: currentColor;
+  background-color: red;
+}
