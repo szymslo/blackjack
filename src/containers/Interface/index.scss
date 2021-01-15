@@ -1,0 +1,94 @@
+button:hover {
+    background-color: #666;
+    transform: translateY(-1px);
+}
+
+@mixin button-general($color, $bgcolor) {
+    color: $color;
+    background-color: $bgcolor;
+    border: solid 1px transparent;
+    font-weight: bold;
+    margin: 1vh;
+    outline: none;   
+    text-decoration: none;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+%button-bet-shared {
+    font-size: 1vw;
+    white-space: nowrap;
+    border-radius: 50%;
+    height: 10vh;
+    width: 10vh;
+}
+
+.buttons {
+    margin-top: -6vh;
+}
+
+.btn-action {
+    @include button-general(white, black);
+    padding: 1vw;
+    width: 10vw;
+    font-size: 1.2vw;
+    border-radius: 1vw
+}
+
+.btn-bet-5 {
+    @extend %button-bet-shared;
+    @include button-general(black, white);
+}
+
+.btn-bet-10 {
+    @extend %button-bet-shared;
+    @include button-general(white, black);
+}
+
+.btn-bet-25 {
+    @extend %button-bet-shared;
+    @include button-general(white, green);
+
+}
+.btn-bet-50 {
+    @extend %button-bet-shared;
+    @include button-general(white, blue);
+}
+
+.btn-bet-100 {
+    @extend %button-bet-shared;
+    @include button-general(white, red);
+}
+
+.interface {
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0, 0.4);
+}
+
+.balance {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    left: 50;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0,0,0, 0.4);
+    border-radius: 0.5vw;
+    font-size: 3.2vh;
+    font-weight: 900;
+    padding: 0.5vw;
+}
+
+.cash {
+    color: goldenrod;
+    font-weight: 600;
+    margin-right: 2vw;
+}
+
+.bet {
+    color: dodgerblue;
+    font-weight: 500;
+}
