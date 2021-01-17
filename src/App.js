@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Interface from "./components/Interface";
@@ -7,7 +7,7 @@ import Context from "./store/context";
 
 const App = () => {
 
-  const { globalDispatch } = useContext(Context);
+  const { globalState, globalDispatch } = useContext(Context);
 
   const shuffleCards = async () => {
     try {
@@ -20,17 +20,33 @@ const App = () => {
     }
   }
 
-  const drawCards = async () => {
+  const drawCards = async (amount) => {
     try {
-      const response = await fetch(`https://deckofcardsapi.com/api/deck/${await shuffleCards()}/draw/?count=4`);
+      const response = await fetch(`https://deckofcardsapi.com/api/deck/${await shuffleCards()}/draw/?count=${amount}`);
       const json = await response.json();
-      console.log(json.cards);
-      globalDispatch({type: 'SET_CARDS', payload: json.cards});
+      if(amount === 4) {
+        globalDispatch({type: 'SET_CARDS', payload: json.cards});
+      }
+      if(amount === 1) {
+        globalDispatch({type: 'ADD_ONE_CARD', payload: json.cards});
+      }
     }
     catch(err) {
       console.log(err);
     }
   }
+
+  useEffect(() => {
+    if(globalState.playerPoints === 21) {
+      globalDispatch({type: "21"});
+      setTimeout(() => globalDispatch({type: "CLEAR"}), 2000);
+    }
+    if(globalState.playerPoints > 21) {
+      globalDispatch({type: "BUST"});
+      setTimeout(() => globalDispatch({type: "CLEAR"}), 2000);
+    }
+    
+  }, [globalState.playerPoints, globalDispatch])
 
   return (
     <div className="root">
