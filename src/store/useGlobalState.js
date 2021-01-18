@@ -78,10 +78,15 @@ const reducer = (state, action) => {
                 playerCards: action.payload.slice(2,4),
                 crupierCards: action.payload.slice(0,2),
             }
-        case "ADD_ONE_CARD":
+        case "ADD_ONE_CARD_PLAYER":
             return {
                 ...state,
                 playerCards: [...state.playerCards, ...action.payload]
+            }
+        case "ADD_ONE_CARD_CRUPIER":
+            return {
+                ...state,
+                crupierCards: [...state.crupierCards, ...action.payload]
             }
         case "SET_POINTS":
             return {
@@ -95,6 +100,7 @@ const reducer = (state, action) => {
                 isDoubled: true,
                 balance : state.balance - state.currentBet,
                 currentBet : state.currentBet * 2,
+                finished: true  
             }
         case "HIT":
             return {
@@ -102,30 +108,42 @@ const reducer = (state, action) => {
                 isHit: true
             }
         case "CHECK_RESULT":
-            if(state.playerPoints > state.crupierPoints) {
+            if(state.crupierPoints > 21) {
                 return {
                     ...state,
                     balance: state.balance + (state.currentBet * 1.5),
-                    result: 'Won'
+                    result: 'Won - Dealer Bust',
+                    finished: true
+                } 
+            }
+            else if(state.playerPoints > state.crupierPoints) {
+                return {
+                    ...state,
+                    balance: state.balance + (state.currentBet * 1.5),
+                    result: 'Won',
+                    finished: true
                 }
             }
             else {
                 return {
                     ...state,
-                    result: 'Lost'
+                    result: 'Lost',
+                    finished: true
                 }
             }
         case "BUST": {
             return {
                 ...state,
-                result: 'Bust'
+                result: 'Bust',
+                finished: true
             } 
         }
         case "21" : {
             return {
                 ...state,
                 balance: state.balance + (state.currentBet * 1.5),
-                result: 'Won'
+                result: 'Won',
+                finished: true
             }
         }
         case "CLEAR" : {

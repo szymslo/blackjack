@@ -4,7 +4,7 @@ import "./index.scss";
 
 const bets = [5,10,25,50,100];
 
-const Interface = ({draw}) => {
+const Interface = ({draw, autoCrupier}) => {
   const { globalState, globalDispatch } = useContext(Context);
 
   return (
@@ -14,24 +14,26 @@ const Interface = ({draw}) => {
           <div className="buttons">
               <button className="btn-action" onClick={async () => {
                 if(!globalState.isHit) {
-                  await draw(1);
+                  await draw(1,'player');
                   globalDispatch({type: "DOUBLE"});
                   await globalDispatch({type: "SET_POINTS"});
                   globalDispatch({type: "CHECK_RESULT"});
-                  setTimeout(() => globalDispatch({type: "CLEAR"}), 2000);
+                  setTimeout(() => globalDispatch({type: "CLEAR"}), 5000);
                 }
                 else {
                   alert (`Can't double now`);
                 }
               }}>Double</button>
               <button className="btn-action" onClick={async () => {
-                await draw(1);
+                await draw(1,'player');
                 globalDispatch({type: "HIT"});
                 await globalDispatch({type: "SET_POINTS"});
               }}>Hit</button>
-              <button className="btn-action" onClick={() => {
+              <button className="btn-action" onClick={async () => {
+                await autoCrupier(globalState.crupierPoints);
+                await globalDispatch({type: "SET_POINTS"});
                 globalDispatch({type: "CHECK_RESULT"});
-                setTimeout(() => globalDispatch({type: "CLEAR"}), 2000);
+                setTimeout(() => globalDispatch({type: "CLEAR"}), 5000);
               }}>Stand</button>
           </div>
         ) : (
