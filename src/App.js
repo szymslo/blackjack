@@ -1,18 +1,37 @@
 import { useContext, useEffect, useState } from "react";
 import "./App.css";
-import Header from "./components/Header";
-import Interface from "./components/Interface";
-import Table from "./components/Table";
+import Header from "./containers/Header";
+import Interface from "./containers/Interface";
+import Table from "./containers/Table";
 import Context from "./store/context";
 
 const App = () => {
 
   const { globalState, globalDispatch } = useContext(Context);
   const [deck, setDeck] = useState(undefined);
-
+  
   useEffect(() => {
     shuffleCards();
   }, [])
+
+  //watch if points hit or exceed 21
+  useEffect(() => {
+    if(globalState.playerPoints === 21) {
+      globalDispatch({type: "BLACKJACK"});
+      setTimeout(() => globalDispatch({type: "CLEAR"}), 3000);
+    }
+    if(globalState.playerPoints > 21) {
+      globalDispatch({type: "BUST"});
+      setTimeout(() => globalDispatch({type: "CLEAR"}), 3000);
+    }
+  }, [globalState.playerPoints, globalDispatch])
+
+  useEffect(() => {
+    if(globalState.history.length > 4) {
+      globalDispatch({type: "END_GAME"});
+      setTimeout(() => globalDispatch({type: "RESET"}), 3000);
+    }
+  }, [globalState.history, globalDispatch])  
 
   const shuffleCards = async () => {
     try {
@@ -30,7 +49,6 @@ const App = () => {
       const response = await fetch(`https://deckofcardsapi.com/api/deck/${deck}/draw/?count=${amount}`);
       const json = await response.json();
       if(amount === 4) {
-        console.log(json.cards);
         json.cards[1].image = './back.png';
         globalDispatch({type: 'SET_CARDS', payload: json.cards});
       }
@@ -48,27 +66,10 @@ const App = () => {
 
   //extremely advanced automated dealer artificial intelligence
   const crupierAI = async (cPoints) => {
-      if(cPoints < 18) {
+    if(cPoints < 18) {
         await drawCards(1, 'crupier');
       }
   }
-
-  //watch if points hit or exceed 21
-  useEffect(() => {
-    if(globalState.playerPoints === 21) {
-      globalDispatch({type: "21"});
-      setTimeout(() => globalDispatch({type: "CLEAR"}), 5000);
-    }
-    if(globalState.playerPoints > 21) {
-      globalDispatch({type: "BUST"});
-      setTimeout(() => globalDispatch({type: "CLEAR"}), 5000);
-    }
-    if(globalState.crupierPoints > 21) {
-      globalDispatch({type: "DEALER BUST"});
-      setTimeout(() => globalDispatch({type: "CLEAR"}), 5000);
-    }
-    
-  }, [globalState.playerPoints, globalState.crupierPoints, globalDispatch])
 
   return (
     <div className="root">

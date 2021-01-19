@@ -3,6 +3,16 @@ img {
     height: 30vh;
 }
 
+@mixin info-general($color, $bgcolor) {
+    position: absolute;
+    left: 50;
+    bottom: 50;
+    font-size: 10vh;
+    border-radius: 1vh;
+    color: $color;
+    background-color: $bgcolor;
+}
+
 .table {
     height: 75%;
     display: flex;
@@ -40,11 +50,13 @@ img {
 }
 
 .result {
-    position: absolute;
-    left: 50;
-    bottom: 50;
-    font-size: 10vh;
-    color: silver;
-    border-radius: 1vh;
-    background-color: rgba(0,0,0,0.9);
+    @include info-general(silver, rgba(0,0,0,0.9));
+}
+
+.game-over {
+    @include info-general(firebrick, rgba(0,0,0,0.9));
+}
+
+.intro {
+    font-size: 4vh;
 }

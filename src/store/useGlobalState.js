@@ -1,5 +1,22 @@
 import {useReducer} from "react";
 
+const initialState = {
+    balance: 1000,
+    currentBet : null,
+    isHit: false,
+    finished: false,
+    gameOver: false,
+    crupierCards : [],
+    playerCards : [],
+    history: [],
+    historyToggled: false,
+    ranking: [],
+    rankingToggled: false,
+    playerPoints: 0,
+    crupierPoints: 0,
+    result: undefined
+}
+
 const countPoints = cards => {
     let points = 0;
     for(const card of cards) {
@@ -70,13 +87,20 @@ const reducer = (state, action) => {
                 ...state,
                 currentBet : action.payload,
                 balance : state.balance - action.payload,
-                result: undefined
+                result: undefined,
+                finished: false
             };
         case "SET_CARDS":
             return {
                 ...state,
                 playerCards: action.payload.slice(2,4),
                 crupierCards: action.payload.slice(0,2),
+            }
+        case "SET_POINTS":
+            return {
+                ...state,
+                playerPoints: countPoints(state.playerCards),
+                crupierPoints : countPoints(state.crupierCards)
             }
         case "ADD_ONE_CARD_PLAYER":
             return {
@@ -88,31 +112,36 @@ const reducer = (state, action) => {
                 ...state,
                 crupierCards: [...state.crupierCards, ...action.payload]
             }
-        case "SET_POINTS":
-            return {
-                ...state,
-                playerPoints: countPoints(state.playerCards),
-                crupierPoints : countPoints(state.crupierCards)
-            }
         case "DOUBLE":
             return {
                 ...state,
-                isDoubled: true,
                 balance : state.balance - state.currentBet,
                 currentBet : state.currentBet * 2,
-                finished: true  
             }
         case "HIT":
             return {
                 ...state,
                 isHit: true
             }
+        case "BUST":
+            return {
+                ...state,
+                result: 'Lost (Bust)',
+                finished: true
+            }
+        case "BLACKJACK":
+            return {
+                ...state,
+                balance: state.balance + (state.currentBet * 1.5),
+                result: 'Won (Blackjack)',
+                finished: true
+            }
         case "CHECK_RESULT":
             if(state.crupierPoints > 21) {
                 return {
                     ...state,
                     balance: state.balance + (state.currentBet * 1.5),
-                    result: 'Won - Dealer Bust',
+                    result: 'Won (Dealer Bust)',
                     finished: true
                 } 
             }
@@ -124,6 +153,14 @@ const reducer = (state, action) => {
                     finished: true
                 }
             }
+            else if(state.playerPoints === state.crupierPoints) {
+                return {
+                    ...state,
+                    balance: state.balance + state.currentBet,
+                    result: 'Push',
+                    finished: true
+                }
+            }
             else {
                 return {
                     ...state,
@@ -131,50 +168,46 @@ const reducer = (state, action) => {
                     finished: true
                 }
             }
-        case "BUST": {
+        case "TOGGLE_HISTORY" : {
             return {
                 ...state,
-                result: 'Bust',
-                finished: true
-            } 
+                historyToggled: !state.historyToggled
+            }
         }
-        case "21" : {
+        case "TOGGLE_RANKING" : {
             return {
                 ...state,
-                balance: state.balance + (state.currentBet * 1.5),
-                result: 'Won',
-                finished: true
+                rankingToggled: !state.rankingToggled
             }
         }
         case "CLEAR" : {
             return {
                 ...state,
-                currentBet: null,
+                history : [...state.history, [state.result, state.currentBet]],
+                isHit: false,
                 crupierCards : [],
                 playerCards : [],
                 playerPoints: 0,
                 crupierPoints: 0,
+                currentBet: null,
             }
-
         }
-            
+        case "RESET" : {
+            return initialState;
+        }
+        case "END_GAME" : {
+            return {
+                ...state,
+                gameOver: true
+            }
+        }
         default:
             return state;
     }
 };
 
 const useGlobalState = () => {
-    const [globalState, globalDispatch] = useReducer(reducer, {
-        balance: 1000,
-        currentBet : null,
-        isHit: false,
-        finished: false,
-        crupierCards : [],
-        playerCards : [],
-        playerPoints: 0,
-        crupierPoints: 0,
-        result: undefined
-    })
+    const [globalState, globalDispatch] = useReducer(reducer, initialState)
     return {globalState, globalDispatch}
 };
 

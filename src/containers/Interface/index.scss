@@ -1,17 +1,15 @@
-button:hover {
-    background-color: #666;
-    transform: translateY(-1px);
-}
-
 @mixin button-general($color, $bgcolor) {
     color: $color;
     background-color: $bgcolor;
     border: solid 1px transparent;
     font-weight: bold;
     margin: 1vh;
-    outline: none;   
-    text-decoration: none;
+    outline: none;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    &:hover {
+        background-color: #666;
+        transform: translateY(-1px);
+    }
 }
 
 %button-bet-shared {

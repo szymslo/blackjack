@@ -1,0 +1,39 @@
+@mixin nav-general($color) {
+    outline: none;
+    color: white;
+    border: none;
+    padding: 0 2vw 0 2vw;
+    background-color: transparent;
+    font-size: 2.3vh;
+    &:hover {
+        border-bottom: 0.5vh solid $color; 
+    }
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    height: 5%;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.nav-ranking {
+    @include nav-general(gold);
+}
+
+.nav-history {
+    @include nav-general(cadetblue);
+}
+
+.nav-save {
+    @include nav-general(green);
+}
+
+.nav-load {
+    @include nav-general(deepskyblue);
+}
+
+.nav-reset {
+    @include nav-general(orangered);
+}
+
