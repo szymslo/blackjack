@@ -4,6 +4,7 @@ const initialState = {
     balance: 1000,
     currentBet : null,
     isHit: false,
+    isDoubled: false,
     finished: false,
     gameOver: false,
     crupierCards : [],
@@ -115,6 +116,7 @@ const reducer = (state, action) => {
         case "DOUBLE":
             return {
                 ...state,
+                isDoubled: true,
                 balance : state.balance - state.currentBet,
                 currentBet : state.currentBet * 2,
             }
@@ -185,6 +187,7 @@ const reducer = (state, action) => {
                 ...state,
                 history : [...state.history, [state.result, state.currentBet]],
                 isHit: false,
+                isDoubled: false,
                 crupierCards : [],
                 playerCards : [],
                 playerPoints: 0,

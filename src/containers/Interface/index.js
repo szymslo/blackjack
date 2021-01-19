@@ -13,22 +13,27 @@ const Interface = ({draw, autoCrupier}) => {
         {globalState.currentBet ? (
           <div className="buttons">
               <button className="btn-action" onClick={async () => {
-                if(!globalState.isHit) {
+                if(!globalState.isHit && !globalState.isDoubled) {
                   globalDispatch({type: "DOUBLE"});
                   await draw(1,'player');
                   await autoCrupier(globalState.crupierPoints);
                   globalDispatch({type: "SET_POINTS"});
-                  globalDispatch({type: "CHECK_RESULT"});
-                  setTimeout(() => globalDispatch({type: "CLEAR"}), 3000);
+                  //globalDispatch({type: "CHECK_RESULT"});
+                  //setTimeout(() => globalDispatch({type: "CLEAR"}), 3000);
                 }
                 else {
                   alert (`Can't double now`);
                 }
               }}>Double</button>
               <button className="btn-action" onClick={async () => {
-                globalDispatch({type: "HIT"});
-                await draw(1,'player');
-                globalDispatch({type: "SET_POINTS"});
+                if(!globalState.isDoubled) {
+                  globalDispatch({type: "HIT"});
+                  await draw(1,'player');
+                  globalDispatch({type: "SET_POINTS"});
+                }
+                else {
+                  alert (`Can't hit now`);
+                }
               }}>Hit</button>
               <button className="btn-action" onClick={async () => {
                 await autoCrupier(globalState.crupierPoints);
