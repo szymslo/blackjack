@@ -12,7 +12,7 @@ const Table = () => {
     return (
         <div className="table">
         {currentBet ? (
-            crupierCards.length < 2 && playerCards.length < 2 ? <div>Drawing cards...</div>
+            crupierCards.length < 2 && playerCards.length < 2 ? (<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>)
                  : (
                     <>
                         <div className="crupier">
