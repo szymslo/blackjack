@@ -18,8 +18,8 @@ const Interface = ({draw, autoCrupier}) => {
                   await draw(1,'player');
                   await autoCrupier(globalState.crupierPoints);
                   globalDispatch({type: "SET_POINTS"});
-                  //globalDispatch({type: "CHECK_RESULT"});
-                  //setTimeout(() => globalDispatch({type: "CLEAR"}), 3000);
+                  globalDispatch({type: "CHECK_RESULT"});
+                  setTimeout(() => globalDispatch({type: "CLEAR"}), 3000);
                 }
                 else {
                   alert (`Can't double now`);

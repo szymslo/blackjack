@@ -10,11 +10,10 @@ const initialState = {
     crupierCards : [],
     playerCards : [],
     history: [],
-    historyToggled: false,
-    ranking: [],
-    rankingToggled: false,
     playerPoints: 0,
     crupierPoints: 0,
+    historyToggled: false,
+    rankingToggled: false,
     result: undefined
 }
 
@@ -89,6 +88,7 @@ const reducer = (state, action) => {
                 currentBet : action.payload,
                 balance : state.balance - action.payload,
                 result: undefined,
+                gameOver: false,
                 finished: false
             };
         case "SET_CARDS":
@@ -138,70 +138,87 @@ const reducer = (state, action) => {
                 result: 'Won (Blackjack)',
                 finished: true
             }
-        case "CHECK_RESULT":
-            if(state.crupierPoints > 21) {
-                return {
-                    ...state,
-                    balance: state.balance + (state.currentBet * 1.5),
-                    result: 'Won (Dealer Bust)',
-                    finished: true
-                } 
-            }
-            else if(state.playerPoints > state.crupierPoints) {
-                return {
-                    ...state,
-                    balance: state.balance + (state.currentBet * 1.5),
-                    result: 'Won',
-                    finished: true
+        case "CHECK_RESULT": {
+            if(state.playerPoints < 21) {
+                if(state.crupierPoints > 21) {
+                    return {
+                        ...state,
+                        balance: state.balance + (state.currentBet * 1.5),
+                        result: 'Won (Dealer Bust)',
+                        finished: true
+                    } 
+                }
+                else if(state.playerPoints > state.crupierPoints) {
+                    return {
+                        ...state,
+                        balance: state.balance + (state.currentBet * 1.5),
+                        result: 'Won',
+                        finished: true
+                    }
+                }
+                else if(state.playerPoints === state.crupierPoints) {
+                    return {
+                        ...state,
+                        balance: state.balance + state.currentBet,
+                        result: 'Push',
+                        finished: true
+                    }
+                }
+                else {
+                    return {
+                        ...state,
+                        result: 'Lost',
+                        finished: true
+                    }
                 }
             }
-            else if(state.playerPoints === state.crupierPoints) {
-                return {
-                    ...state,
-                    balance: state.balance + state.currentBet,
-                    result: 'Push',
-                    finished: true
-                }
-            }
-            else {
-                return {
-                    ...state,
-                    result: 'Lost',
-                    finished: true
-                }
-            }
-        case "TOGGLE_HISTORY" : {
+            else return state; 
+        }       
+        case "TOGGLE_HISTORY" : 
             return {
                 ...state,
                 historyToggled: !state.historyToggled
             }
-        }
-        case "TOGGLE_RANKING" : {
+        case "TOGGLE_RANKING" : 
             return {
                 ...state,
                 rankingToggled: !state.rankingToggled
             }
-        }
         case "CLEAR" : {
-            return {
-                ...state,
-                history : [...state.history, [state.result, state.currentBet]],
-                isHit: false,
-                isDoubled: false,
-                crupierCards : [],
-                playerCards : [],
-                playerPoints: 0,
-                crupierPoints: 0,
-                currentBet: null,
+            if(state.finished !== false)
+            {
+                return {
+                    ...state,
+                    history : [...state.history, [state.result, state.currentBet]],
+                    isHit: false,
+                    isDoubled: false,
+                    finished: false,
+                    crupierCards : [],
+                    playerCards : [],
+                    playerPoints: 0,
+                    crupierPoints: 0,
+                    currentBet: null,
+                }
             }
+            else return state;
         }
-        case "RESET" : {
+        case "RESET" : 
             return initialState;
-        }
-        case "END_GAME" : {
+            
+        case "END_GAME" : 
             return {
                 ...state,
                 gameOver: true
+            }
+        case "LOAD_GAME" : {
+            if(localStorage.getItem('gameSave')) {
+                const rawState = localStorage.getItem('gameSave');
+                const loadedState = JSON.parse(rawState);
+                return loadedState;
+            }
+            else {
+                alert('No game saves found');
+                return state;
             }
         }
         default:

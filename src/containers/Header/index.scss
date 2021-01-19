@@ -21,8 +21,18 @@
     @include nav-general(gold);
 }
 
+.nav-ranking-active {
+    @include nav-general(gold);
+    border-bottom: 0.5vh solid deeppink;
+}
+
 .nav-history {
     @include nav-general(cadetblue);
+}
+
+.nav-history-active {
+    @include nav-general(cadetblue);
+    border-bottom: 0.5vh solid deeppink;
 }
 
 .nav-save {

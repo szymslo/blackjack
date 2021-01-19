@@ -1,14 +1,23 @@
 import { useContext, useEffect, useState } from "react";
-import "./App.css";
 import Header from "./containers/Header";
 import Interface from "./containers/Interface";
 import Table from "./containers/Table";
 import Context from "./store/context";
+import "./App.css";
 
 const App = () => {
 
   const { globalState, globalDispatch } = useContext(Context);
   const [deck, setDeck] = useState(undefined);
+
+  //prompt on window close
+  useEffect(() => {
+    window.addEventListener("beforeunload", e => {
+      saveGame(globalState);
+      e.preventDefault();
+      return e.returnValue = 'Game has been saved';
+    });
+  })
   
   useEffect(() => {
     shuffleCards();
@@ -26,12 +35,24 @@ const App = () => {
     }
   }, [globalState.playerPoints, globalDispatch])
 
+  //end game on 5 rounds
   useEffect(() => {
     if(globalState.history.length > 4) {
       globalDispatch({type: "END_GAME"});
+      saveRanking(globalState.balance);
       setTimeout(() => globalDispatch({type: "RESET"}), 3000);
     }
-  }, [globalState.history, globalDispatch])  
+  }, [globalState.history, globalState.balance, globalDispatch])
+  
+  const saveRanking = (balance) => {
+    const scores = JSON.parse(localStorage.getItem('scores')) || [];
+    scores.push(balance);
+    localStorage.setItem('scores', JSON.stringify(scores));
+  }
+
+  const saveGame = (gameState) => {
+    localStorage.setItem('gameSave', JSON.stringify(gameState));
+  }
 
   const shuffleCards = async () => {
     try {
@@ -73,7 +94,7 @@ const App = () => {
 
   return (
     <div className="root">
-      <Header/>
+      <Header save={saveGame}/>
       <Table/>
       <Interface draw={drawCards} autoCrupier={crupierAI}/>
     </div>

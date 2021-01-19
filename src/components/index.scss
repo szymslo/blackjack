@@ -1,0 +1,27 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+@mixin addon-general($mgtop) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin-top: $mgtop;
+    padding: 0.5vw;
+    font-size: 1.2vw;
+    font-weight: 500;
+    border-radius: 0 2vh 2vh 0;
+    text-align: left;
+    color: black;
+    background-color: rgba(255,255,255, 0.5);
+}
+
+.ranking {
+    @include addon-general(15vh);
+}
+
+.history {
+    @include addon-general(55vh);
+}

@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import Context from "../../store/context";
 import RoundHistory from "../../components/RoundHistory"
+import Ranking from "../../components/Ranking"
 import "./index.scss"
 
 const Table = () => {
 
     const { globalState } = useContext(Context);
-    const { playerCards, crupierCards, currentBet, result, playerPoints, crupierPoints, finished, history, historyToggled, gameOver } = globalState;
+    const { playerCards, crupierCards, currentBet, result, playerPoints, crupierPoints, finished, history, historyToggled, rankingToggled, gameOver } = globalState;
 
     return (
         <div className="table">
@@ -31,6 +32,7 @@ const Table = () => {
                     </>
                  )
         ) : <div className="intro">Place bet to start a round</div>}
+        {rankingToggled && <Ranking/>}
         {historyToggled && <RoundHistory data={history}/>}
         {gameOver && <div className="game-over">GAME OVER</div>}
         </div>
