@@ -4,7 +4,7 @@
     border: none;
     padding: 0 2vw 0 2vw;
     background-color: transparent;
-    font-size: 2.3vh;
+    font-size: 2vh;
     &:hover {
         border-bottom: 0.5vh solid $color; 
     }
@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center;
     height: 5%;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0,0,0,0.5);
 }
 
 .nav-ranking {

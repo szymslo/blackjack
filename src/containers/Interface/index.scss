@@ -5,7 +5,7 @@
     font-weight: bold;
     margin: 1vh;
     outline: none;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: .5vh .5vh 1vh rgba(0, 0, 0, 0.5);
     &:hover {
         background-color: #666;
         transform: translateY(-1px);
@@ -13,23 +13,23 @@
 }
 
 %button-bet-shared {
-    font-size: 1vw;
+    font-size: 2.5vh;
     white-space: nowrap;
     border-radius: 50%;
-    height: 10vh;
-    width: 10vh;
+    height: 8vh;
+    width: 8vh;
 }
 
 .buttons {
-    margin-top: -6vh;
+    margin-top: -5vh;
 }
 
 .btn-action {
     @include button-general(white, black);
-    padding: 1vw;
-    width: 10vw;
-    font-size: 1.2vw;
-    border-radius: 1vw
+    padding: 1vh;
+    width: 15vh;
+    font-size: 3vh;
+    border-radius: 1vh;
 }
 
 .btn-bet-5 {
@@ -62,7 +62,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0,0,0, 0.4);
+    background-color: rgba(0,0,0,0.3);
 }
 
 .balance {
@@ -75,14 +75,14 @@
     text-align: center;
     background-color: rgba(0,0,0, 0.4);
     border-radius: 0.5vw;
-    font-size: 3.2vh;
+    font-size: 3vh;
     font-weight: 900;
     padding: 0.5vw;
 }
 
 .cash {
     color: goldenrod;
-    font-weight: 600;
+    font-weight: 700;
     margin-right: 2vw;
 }
 

@@ -22,16 +22,16 @@ const Table = () => {
                                 }
                                 return <img src={card.image} key={index} alt={`crupier_card_${index+1}`}/>
                             })}
-                            {finished ? <div className="points">Points: {globalState.crupierPoints}</div> : <div className="points">Points: ?</div>}
+                            {finished ? <div className="points">{globalState.crupierPoints}</div> : <div className="points">?</div>}
                         </div>
                         <div className="player">
                             {playerCards.map((card, index) => <img src={card.image} key={index} alt={`player_card_${index+1}`}/>)}
-                            <div className="points">Points: {globalState.playerPoints}</div>
+                            <div className="points">{globalState.playerPoints}</div>
                         </div>
                         {finished && <div className="result">{`${result} - ${playerPoints} to ${crupierPoints}`}</div>}
                     </>
                  )
-        ) : <div className="intro">Place bet to start a round</div>}
+        ) : <div className="intro">Place a bet to start a round</div>}
         {rankingToggled && <Ranking/>}
         {historyToggled && <RoundHistory data={history}/>}
         {gameOver && <div className="game-over">GAME OVER</div>}
