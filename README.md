@@ -6,7 +6,6 @@
 
 To run this app locally: 
 
-- remove *package-lock.json* and *yarn.lock*
 - npm install
 
 In the project directory you can use:
