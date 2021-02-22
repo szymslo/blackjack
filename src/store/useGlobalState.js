@@ -1,4 +1,5 @@
 import {useReducer} from "react";
+import loadGame from "../storage/loadGame"
 
 const initialState = {
     balance: 1000,
@@ -211,10 +212,9 @@ const reducer = (state, action) => {
                 gameOver: true
             }
         case "LOAD_GAME" : {
-            if(localStorage.getItem('gameSave')) {
-                const rawState = localStorage.getItem('gameSave');
-                const loadedState = JSON.parse(rawState);
-                return loadedState;
+            const loadedGame = loadGame();
+            if(loadedGame !== 'nosaves') {
+                return loadedGame;
             }
             else {
                 alert('No game saves found');

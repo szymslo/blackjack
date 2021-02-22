@@ -3,6 +3,11 @@ import Header from "./containers/Header";
 import Interface from "./containers/Interface";
 import Table from "./containers/Table";
 import Context from "./store/context";
+import crupierAI from "./utility/crupierAI"
+import drawCards from "./utility/drawCards";
+import shuffleCards from "./utility/shuffleCards";
+import saveGame from "./storage/saveGame"
+import saveRanking from "./storage/saveRanking"
 import "./App.css";
 
 const App = () => {
@@ -19,8 +24,11 @@ const App = () => {
     });
   })
   
-  useEffect(() => {
-    shuffleCards();
+  useEffect(() => { 
+    (async () => {
+      const returnedDeck = await shuffleCards();
+      setDeck(returnedDeck);
+    })()
   }, [])
 
   //watch if points hit or exceed 21
@@ -44,59 +52,11 @@ const App = () => {
     }
   }, [globalState.history, globalState.balance, globalDispatch])
   
-  const saveRanking = (balance) => {
-    const scores = JSON.parse(localStorage.getItem('scores')) || [];
-    scores.push(balance);
-    localStorage.setItem('scores', JSON.stringify(scores));
-  }
-
-  const saveGame = (gameState) => {
-    localStorage.setItem('gameSave', JSON.stringify(gameState));
-  }
-
-  const shuffleCards = async () => {
-    try {
-      const response = await fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6');
-      const json = await response.json();
-      setDeck(json.deck_id);
-    }
-    catch(err) {
-      console.log(err);
-    }
-  }
-
-  const drawCards = async (amount, target) => {
-    try {
-      const response = await fetch(`https://deckofcardsapi.com/api/deck/${deck}/draw/?count=${amount}`);
-      const json = await response.json();
-      if(amount === 4) {
-        json.cards[1].image = './back.png';
-        globalDispatch({type: 'SET_CARDS', payload: json.cards});
-      }
-      if(amount === 1 && target === 'player') {
-        globalDispatch({type: 'ADD_ONE_CARD_PLAYER', payload: json.cards});
-      }
-      if(amount === 1 && target === 'crupier') {
-        globalDispatch({type: 'ADD_ONE_CARD_CRUPIER', payload: json.cards});
-      }
-    }
-    catch(err) {
-      console.log(err);
-    }
-  }
-
-  //extremely advanced automated dealer artificial intelligence
-  const crupierAI = async (cPoints) => {
-    if(cPoints < 18) {
-        await drawCards(1, 'crupier');
-      }
-  }
-
   return (
     <div className="root">
       <Header save={saveGame}/>
       <Table/>
-      <Interface draw={drawCards} autoCrupier={crupierAI}/>
+      <Interface draw={drawCards} autoCrupier={crupierAI} deck={deck}/>
     </div>
   );
 };

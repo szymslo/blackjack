@@ -12,7 +12,7 @@ const Table = () => {
     return (
         <div className="table">
         {currentBet ? (
-            crupierCards.length < 2 && playerCards.length < 2 ? (<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>)
+            crupierCards.length < 2 && playerCards.length < 2 ? (<div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>)
                  : (
                     <>
                         <div className="crupier">
@@ -31,7 +31,7 @@ const Table = () => {
                         {finished && <div className="result">{`${result} - ${playerPoints} to ${crupierPoints}`}</div>}
                     </>
                  )
-        ) : <div className="intro">Place a bet to start a round</div>}
+        ) : <div className="intro">Place a bet to start new round</div>}
         {rankingToggled && <Ranking/>}
         {historyToggled && <RoundHistory data={history}/>}
         {gameOver && <div className="game-over">GAME OVER</div>}
